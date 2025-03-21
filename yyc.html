@@ -18,6 +18,8 @@
             justify-content: center;
             min-height: 100vh;
             overflow: hidden;
+            /* 调整虚化过渡时间为 1 秒 */
+            transition: filter 1s ease; 
         }
 
         /* 标题样式，添加阴影和边距 */
@@ -44,9 +46,13 @@
         .button-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
+            justify-content: center; /* 水平居中 */
+            align-items: center; /* 垂直居中 */
             gap: 20px;
-            margin-top: 30px;
+            margin: 30px auto; /* 上下外边距为 30px，左右自动居中 */
+            max-width: 80%; /* 限制容器宽度 */
+            max-height: calc(3 * (60px + 20px)); /* 假设按钮高度为 60px，间距为 20px，共 3 行 */
+            flex-direction: column; /* 竖向排列 */
         }
 
         /* 按钮样式，添加过渡效果和悬停效果 */
@@ -193,10 +199,29 @@
             color: #884A39;
             font-size: 16px;
         }
+
+        /* 背景虚化层 */
+        #blur-overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            backdrop-filter: blur(5px);
+            z-index: 4;
+        }
+
+        /* 虚化除点击按钮外的其他元素 */
+        .blur-except-button {
+            filter: blur(5px);
+        }
     </style>
 </head>
 
 <body>
+    <div id="blur-overlay"></div>
     <div id="current-time"></div>
     <h1>欢迎来到网站快捷访问程序</h1>
     <!-- 滑块验证容器 -->
@@ -208,80 +233,46 @@
     <!-- 加载提示 -->
     <div id="loading" class="loading" style="display: none;">加载中······</div>
     <div class="button-container" id="buttonContainer">
-        <button onclick="openLink('https://www.doubao.com')">豆包</button>
-        <button onclick="openLink('https://www.douyin.com')">抖音</button>
-        <button onclick="openLink('https://www.jd.com')">京东</button>
-        <button onclick="openLink('https://www.apple.com.cn')">Apple（中国大陆）</button>
-        <button onclick="openLink('https://www.taobao.com')">淘宝</button>
-        <button onclick="openLink('https://consumer.huawei.com/cn/')">华为（消费者业务）</button>
-        <button onclick="openLink('https://www.oppo.com/cn/smartphones/')">OPPO</button>
-        <button onclick="openLink('https://www.vivo.com.cn/brand/about')">vivo</button>
-        <button onclick="openLink('https://weixin.qq.com/')">微信</button>
-        <button onclick="openLink('https://im.qq.com/index/')">QQ</button>
-        <button onclick="openLink('https://easinote.seewo.com/')">希沃白板</button>
-        <button onclick="openLink('https://www.mi.com/index.html')">小米（消费者业务）</button>
-        <button onclick="openLink('https://yyc-html.github.io/yyc.github.io/666.html')">计算器</button>
+        <button onclick="openLink(this, 'https://www.doubao.com')">豆包</button>
+        <button onclick="openLink(this, 'https://www.douyin.com')">抖音</button>
+        <button onclick="openLink(this, 'https://www.jd.com')">京东</button>
+        <button onclick="openLink(this, 'https://www.apple.com.cn')">Apple（中国大陆）</button>
+        <button onclick="openLink(this, 'https://www.taobao.com')">淘宝</button>
+        <button onclick="openLink(this, 'https://consumer.huawei.com/cn/')">华为（消费者业务）</button>
+        <button onclick="openLink(this, 'https://www.oppo.com/cn/smartphones/')">OPPO</button>
+        <button onclick="openLink(this, 'https://www.vivo.com.cn/brand/about')">vivo</button>
+        <button onclick="openLink(this, 'https://weixin.qq.com/')">微信</button>
+        <button onclick="openLink(this, 'https://im.qq.com/index/')">QQ</button>
+        <button onclick="openLink(this, 'https://easinote.seewo.com/')">希沃白板</button>
+        <button onclick="openLink(this, 'https://www.mi.com/index.html')">小米（消费者业务）</button>
+        <button onclick="openLink(this, 'https://yyc-html.github.io/yyc.github.io/666.html')">计算器</button>
     </div>
     <footer>
         请勿抄袭，这是一位小学生的作品。   大泡未来终端信息化技术与消费者业务部门  x  予译  联合制作    版本：2.0.1  Version：2.0.1   停止更新
     </footer>
 
     <script>
-        // 基于本地时间计算北京时间
+        const blurOverlay = document.getElementById('blur-overlay');
+        const loadingElement = document.getElementById('loading');
+
+        // 使用本地时间
         function getLocalTime() {
             const now = new Date();
-            const offset = 8; // 北京时间是 UTC+8
-            const utc = now.getTime() + (now.getTimezoneOffset() * 60000);
-            const beijingTime = new Date(utc + (3600000 * offset));
-            const year = beijingTime.getFullYear();
-            const month = String(beijingTime.getMonth() + 1).padStart(2, '0');
-            const day = String(beijingTime.getDate()).padStart(2, '0');
-            const week = ['日', '一', '二', '三', '四', '五', '六'][beijingTime.getDay()];
-            const hours = String(beijingTime.getHours()).padStart(2, '0');
-            const minutes = String(beijingTime.getMinutes()).padStart(2, '0');
-            const seconds = String(beijingTime.getSeconds()).padStart(2, '0');
+            const year = now.getFullYear();
+            const month = String(now.getMonth() + 1).padStart(2, '0');
+            const day = String(now.getDate()).padStart(2, '0');
+            const week = ['日', '一', '二', '三', '四', '五', '六'][now.getDay()];
+            const hours = String(now.getHours()).padStart(2, '0');
+            const minutes = String(now.getMinutes()).padStart(2, '0');
+            const seconds = String(now.getSeconds()).padStart(2, '0');
             const timeString = `${year}年${month}月${day}日 星期${week} ${hours}:${minutes}:${seconds}`;
             document.getElementById('current-time').textContent = timeString;
+            // 每秒更新一次时间
+            setTimeout(getLocalTime, 1000);
         }
 
-        // 页面加载时先显示本地时间
+        // 页面加载时显示本地时间
         getLocalTime();
-        // 每秒更新本地时间
-        setInterval(getLocalTime, 1000);
-
-        // 从网络时间服务器获取时间
-        function getTimeFromServer() {
-            const xhr = new XMLHttpRequest();
-            xhr.open('GET', 'https://worldtimeapi.org/api/timezone/Asia/Shanghai', true);
-            const loadingElement = document.getElementById('loading');
-            loadingElement.style.display = 'block';
-
-            xhr.onreadystatechange = function () {
-                if (xhr.readyState === 4) {
-                    loadingElement.style.display = 'none';
-                    if (xhr.status === 200) {
-                        try {
-                            const response = JSON.parse(xhr.responseText);
-                            const date = new Date(response.datetime);
-                            const year = date.getFullYear();
-                            const month = String(date.getMonth() + 1).padStart(2, '0');
-                            const day = String(date.getDate()).padStart(2, '0');
-                            const week = ['日', '一', '二', '三', '四', '五', '六'][date.getDay()];
-                            const hours = String(date.getHours()).padStart(2, '0');
-                            const minutes = String(date.getMinutes()).padStart(2, '0');
-                            const seconds = String(date.getSeconds()).padStart(2, '0');
-                            const timeString = `${year}年${month}月${day}日 星期${week} ${hours}:${minutes}:${seconds}`;
-                            document.getElementById('current-time').textContent = timeString;
-                        } catch (error) {
-                            console.error('解析时间响应数据时出错:', error);
-                        }
-                    } else {
-                        console.error('获取网络时间失败，状态码:', xhr.status);
-                    }
-                }
-            };
-            xhr.send();
-        }
 
         let isVerified = false;
         const sliderContainer = document.getElementById('sliderContainer');
@@ -319,10 +310,6 @@
                     isVerified = true;
                     sliderContainer.classList.add('verified');
                     sliderText.textContent = '验证成功';
-                    // 验证通过后开始每隔一段时间更新时间服务器的时间
-                    setInterval(getTimeFromServer, 60000); // 修改为1分钟（60000毫秒）
-                    // 立即尝试更新一次
-                    getTimeFromServer();
                 } else {
                     // 验证失败
                     sliderContainer.classList.add('verify-fail');
@@ -335,8 +322,15 @@
             }
         });
 
-        function openLink(url) {
+        function openLink(button, url) {
             if (isVerified) {
+                // 显示背景虚化层
+                blurOverlay.style.display = 'block';
+                // 虚化除点击按钮外的其他元素
+                const allElements = document.querySelectorAll('body > *:not(button)');
+                allElements.forEach(element => {
+                    element.classList.add('blur-except-button');
+                });
                 // 重置验证状态和滑块位置
                 isVerified = false;
                 sliderContainer.classList.remove('verified');
@@ -345,6 +339,14 @@
                 sliderText.textContent = '请拖动滑块进行验证';
 
                 window.open(url, '_blank');
+
+                // 一段时间后隐藏背景虚化层
+                setTimeout(() => {
+                    blurOverlay.style.display = 'none';
+                    allElements.forEach(element => {
+                        element.classList.remove('blur-except-button');
+                    });
+                }, 1000);
             } else {
                 alert('请先完成滑块验证');
             }
