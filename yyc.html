@@ -57,8 +57,8 @@
 
         /* 按钮样式，添加过渡效果和悬停效果 */
         button {
-            padding: 15px 30px;
-            font-size: 18px;
+            padding: 10px 20px; /* 减少内边距 */
+            font-size: 16px;    /* 适当减小字体大小 */
             background-color: #FFC26F;
             color: #884A39;
             border: none;
@@ -66,6 +66,14 @@
             cursor: pointer;
             box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+            /* 确保按钮宽度一致 */
+            width: 250px; /* 增大按钮宽度 */
+            /* 防止文字换行 */
+            white-space: nowrap; 
+            /* 隐藏溢出内容 */
+            overflow: hidden; 
+            /* 当文字溢出时显示省略号 */
+            text-overflow: ellipsis; 
         }
 
         button:hover {
@@ -246,12 +254,20 @@
         <button onclick="openLink(this, 'https://easinote.seewo.com/')">希沃白板</button>
         <button onclick="openLink(this, 'https://www.mi.com/index.html')">小米（消费者业务）</button>
         <button onclick="openLink(this, 'https://yyc-html.github.io/yyc.github.io/666.html')">计算器</button>
+        <button onclick="openLink(this, 'https://www.bilibili.com/')">哔哩哔哩</button>
+        <button onclick="openLink(this, 'https://v.qq.com/')">腾讯视频</button>
+        <button onclick="openLink(this, 'https://www.iqiyi.com/')">爱奇艺</button>
     </div>
     <footer>
-        请勿抄袭，这是一位小学生的作品。   大泡未来终端信息化技术与消费者业务部门  x  予译  联合制作    版本：2.4.7  Version：2.4.7
+        更多网站链接正在接入中，敬请期待！   大泡未来终端信息化技术与消费者业务部门  x  予译  联合制作    版本：2.6.1  Version：2.6.1
     </footer>
 
     <script>
+        // 页面加载完成时弹出提示框
+        window.onload = function() {
+            alert('亲爱的用户，您好！快捷网站程序现已更新至2.6.1版本。本次更新主要优化了适配兼容性及更多网站，其他网站正在接入中。如有建议，可发送至CENYUYI123456@outlook.com联系，谢谢！');
+        };
+
         const blurOverlay = document.getElementById('blur-overlay');
         const loadingElement = document.getElementById('loading');
 
@@ -316,41 +332,10 @@
                     setTimeout(() => {
                         sliderContainer.classList.remove('verify-fail');
                         slider.style.left = 0;
-                        sliderBg.style.width = 0;
                     }, 300);
                 }
             }
         });
-
-        function openLink(button, url) {
-            if (isVerified) {
-                // 显示背景虚化层
-                blurOverlay.style.display = 'block';
-                // 虚化除点击按钮外的其他元素
-                const allElements = document.querySelectorAll('body > *:not(button)');
-                allElements.forEach(element => {
-                    element.classList.add('blur-except-button');
-                });
-                // 重置验证状态和滑块位置
-                isVerified = false;
-                sliderContainer.classList.remove('verified');
-                slider.style.left = 0;
-                sliderBg.style.width = 0;
-                sliderText.textContent = '请拖动滑块进行验证';
-
-                window.open(url, '_blank');
-
-                // 一段时间后隐藏背景虚化层
-                setTimeout(() => {
-                    blurOverlay.style.display = 'none';
-                    allElements.forEach(element => {
-                        element.classList.remove('blur-except-button');
-                    });
-                }, 1000);
-            } else {
-                alert('请先完成滑块验证');
-            }
-        }
     </script>
 </body>
 
