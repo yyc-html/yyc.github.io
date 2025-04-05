@@ -336,7 +336,19 @@
                 }
             }
         });
+
+        // 定义 openLink 函数
+        function openLink(button, link) {
+            console.log('openLink 函数被调用');
+            console.log('验证状态:', isVerified);
+            if (isVerified) {
+                console.log('尝试打开链接:', link);
+                window.open(link, '_blank');
+            } else {
+                alert('请先完成验证！');
+            }
+        }
     </script>
 </body>
 
-</html>
+</html>    
