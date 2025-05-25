@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>检查更新</title>
+    <style>
+        :root {
+            --primary-color: #FF9500;
+            --secondary-color: #FFCC66;
+            --success-color: #4CAF50;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            margin: 0;
+            background-color: #FFF3E0;
+            position: relative;
+            /* 隐藏溢出内容，防止小球超出屏幕显示滚动条 */
+            overflow: hidden;
+        }
+
+        .update-container {
+            text-align: center;
+            transition: transform 0.5s ease;
+            /* 确保更新容器在小球上方 */
+            z-index: 1;
+        }
+
+        .update-container.updating {
+            transform: translateY(-50px);
+        }
+
+        .update-button {
+            padding: 12px 24px;
+            font-size: 16px;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .update-button:hover {
+            background-color: #E68500;
+        }
+
+        .animation-container {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+        }
+
+        .ball {
+            position: absolute;
+            /* 增大球的尺寸 */
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: var(--secondary-color);
+            animation: fly 3s 1 forwards ease-in-out;
+        }
+
+        /* 为 10 个小球设置不同的初始位置和减小动画延迟间隔 */
+        .ball:nth-child(1) { left: 10%; top: 15%; animation-delay: 0.05s; }
+        .ball:nth-child(2) { left: 80%; top: 20%; animation-delay: 0.1s; }
+        .ball:nth-child(3) { left: 40%; top: 70%; animation-delay: 0.15s; }
+        .ball:nth-child(4) { left: 90%; top: 50%; animation-delay: 0.2s; }
+        .ball:nth-child(5) { left: 20%; top: 90%; animation-delay: 0.25s; }
+        .ball:nth-child(6) { left: 60%; top: 30%; animation-delay: 0.3s; }
+        .ball:nth-child(7) { left: 30%; top: 40%; animation-delay: 0.35s; }
+        .ball:nth-child(8) { left: 70%; top: 80%; animation-delay: 0.4s; }
+        .ball:nth-child(9) { left: 50%; top: 60%; animation-delay: 0.45s; }
+        .ball:nth-child(10) { left: 15%; top: 55%; animation-delay: 0.5s; }
+
+        @keyframes fly {
+            0% {
+                transform: translate(0, 0);
+                opacity: 0.8;
+            }
+            25% {
+                transform: translate(calc(30vw * var(--random-x)), calc(30vh * var(--random-y)));
+                opacity: 1;
+            }
+            50% {
+                transform: translate(calc(-30vw * var(--random-x)), calc(30vh * var(--random-y)));
+                opacity: 0.8;
+            }
+            75% {
+                transform: translate(calc(30vw * var(--random-x)), calc(-30vh * var(--random-y)));
+                opacity: 1;
+            }
+            100% {
+                /* 统一回到屏幕底部中心 */
+                transform: translate(calc(50vw - 50%), calc(100vh - 100%));
+                opacity: 0.8;
+            }
+        }
+
+        /* 为每个小球设置随机运动参数 */
+        .ball:nth-child(1) { --random-x: 0.2; --random-y: 0.8; }
+        .ball:nth-child(2) { --random-x: 0.9; --random-y: 0.3; }
+        .ball:nth-child(3) { --random-x: 0.4; --random-y: 0.6; }
+        .ball:nth-child(4) { --random-x: 0.7; --random-y: 0.5; }
+        .ball:nth-child(5) { --random-x: 0.1; --random-y: 0.9; }
+        .ball:nth-child(6) { --random-x: 0.6; --random-y: 0.2; }
+        .ball:nth-child(7) { --random-x: 0.3; --random-y: 0.7; }
+        .ball:nth-child(8) { --random-x: 0.8; --random-y: 0.4; }
+        .ball:nth-child(9) { --random-x: 0.5; --random-y: 0.6; }
+        .ball:nth-child(10) { --random-x: 0.2; --random-y: 0.5; }
+
+        .progress-bar {
+            width: 200px;
+            height: 8px;
+            background-color: #FFE0B2;
+            border-radius: 4px;
+            margin: 20px auto;
+            overflow: hidden;
+        }
+
+        .progress {
+            height: 100%;
+            background-color: var(--primary-color);
+            width: 0%;
+            border-radius: 4px;
+            transition: width 0.3s ease;
+        }
+
+        .result-message {
+            font-size: 18px;
+            font-weight: bold;
+            color: var(--success-color);
+            display: none;
+        }
+
+        .bottom-text {
+            position: absolute;
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 16px;
+            color: var(--primary-color);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="update-container">
+        <button class="update-button" onclick="startUpdateCheck()">检查更新</button>
+        <div class="progress-bar">
+            <div class="progress" id="progress"></div>
+        </div>
+        <div class="result-message" id="resultMessage">已是最新版本 3.6.2</div>
+    </div>
+    <div class="animation-container">
+        <!-- 增加到 10 个小球 -->
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+        <div class="ball"></div>
+    </div>
+    <div class="bottom-text">大泡未来终端网站更新检测</div>
+
+    <script>
+        const animationContainer = document.querySelector('.animation-container');
+        const resultMessage = document.getElementById('resultMessage');
+        const updateButton = document.querySelector('.update-button');
+        const progress = document.getElementById('progress');
+        const updateContainer = document.querySelector('.update-container');
+
+        function startUpdateCheck() {
+            updateButton.disabled = true;
+            animationContainer.style.display = 'block';
+            resultMessage.style.display = 'none';
+            progress.style.width = '0%';
+
+            const balls = document.querySelectorAll('.ball');
+            balls.forEach(ball => {
+                ball.style.animation = 'none';
+                ball.offsetHeight; // 强制重绘
+                ball.style.animation = 'fly 3s 1 forwards ease-in-out';
+            });
+
+            updateContainer.classList.add('updating');
+
+            let progressValue = 0;
+            const progressInterval = setInterval(() => {
+                progressValue += 1;
+                progress.style.width = `${progressValue}%`;
+                if (progressValue >= 100) clearInterval(progressInterval);
+            }, 30);
+
+            setTimeout(() => {
+                animationContainer.style.display = 'none';
+                resultMessage.style.display = 'block';
+                updateButton.disabled = false;
+                updateContainer.classList.remove('updating');
+            }, 3000);
+        }
+
+        animationContainer.style.display = 'none';
+    </script>
+</body>
+
+</html>
