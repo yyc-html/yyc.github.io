@@ -11,9 +11,10 @@
             --secondary-color: #FFC26F;
             --hover-color: #FFAB5C;
             --bg-color: #f9f5e7;
+            --glow-color: rgba(255, 171, 92, 0.8);
+            --error-color: #ff4444;
         }
 
-        /* 设置全局样式，包括字体、背景颜色和内边距 */
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             background-color: var(--bg-color);
@@ -25,54 +26,46 @@
             justify-content: center;
             overflow-y: auto;
             min-height: 100vh;
-            transition: filter 1s ease;
         }
 
-        /* 标题样式，添加阴影和边距 */
         h1 {
             color: var(--primary-color);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             margin: 20px 0 30px 0;
-            font-size: 32px;
+            font-size: 28px;
             font-weight: bold;
             text-align: center;
         }
 
-        /* 时间显示样式 */
         #current-time {
             position: absolute;
-            top: 20px;
-            right: 20px;
-            font-size: 20px;
+            top: 10px;
+            right: 10px;
+            font-size: 16px;
             font-weight: bold;
             color: var(--primary-color);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        /* 按钮容器样式，设置为弹性布局并添加间距 */
         .button-container {
             display: flex;
             flex-wrap: wrap;
-            justify-content: center;
-            align-items: center;
-            gap: 25px;
-            margin: 30px auto;
-            max-width: 90%;
-            flex-direction: column;
+            max-width: 80%;
+            justify-content: space-between;
+            gap: 10px;
+            margin: 20px auto;
         }
 
-        /* 按钮样式，添加过渡效果和悬停效果 */
         button {
-            padding: 12px 25px;
-            font-size: 18px;
+            padding: 10px 20px;
+            font-size: 16px;
             background-color: var(--secondary-color);
             color: var(--primary-color);
             border: none;
-            border-radius: 12px;
+            border-radius: 10px;
             cursor: pointer;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
-            width: 280px;
             white-space: nowrap;
             overflow: hidden;
             text-overflow: ellipsis;
@@ -80,68 +73,51 @@
 
         button:hover {
             background-color: var(--hover-color);
-            transform: translateY(-4px);
-            box-shadow: 0 8px 12px rgba(0, 0, 0, 0.15);
+            transform: translateY(-3px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 0 10px var(--glow-color);
         }
 
         button:active {
             transform: scale(0.95);
         }
 
-        /* 响应式设计，屏幕宽度大于 768px 时横向排列按钮 */
-        @media (min-width: 768px) {
-            .button-container {
-                flex-direction: row;
-            }
-        }
-
-        /* 手机竖屏样式，隐藏时间显示和部分页脚内容 */
-        @media (max-width: 767px) {
-            #current-time {
-                display: none;
-            }
-            .footer-text-remove {
-                display: none;
-            }
-        }
-
-        /* 页脚样式，设置颜色和边距 */
-        footer {
-            color: var(--primary-color);
-            margin-top: 60px;
-            font-size: 16px;
-            text-align: center;
-            padding: 20px;
-        }
-
-        /* 滑块验证样式 */
         .slider-container {
             position: relative;
-            width: 350px;
-            height: 50px;
+            width: 90%;
+            max-width: 350px;
+            height: 40px;
             background-color: #F5EBE0;
-            border-radius: 25px;
+            border-radius: 20px;
             margin: 20px auto;
             text-align: center;
-            line-height: 50px;
+            line-height: 40px;
             color: var(--primary-color);
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: box-shadow 0.3s ease;
+        }
+
+        .slider-container.verify-fail {
+            box-shadow: 0 0 10px var(--error-color);
         }
 
         .slider {
             position: absolute;
             top: 0;
             left: 0;
-            width: 50px;
-            height: 50px;
+            width: 40px;
+            height: 40px;
             background-color: var(--secondary-color);
-            border-radius: 25px;
+            border-radius: 20px;
             cursor: pointer;
             z-index: 2;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
+        }
+
+        .slider:hover,
+        .slider.dragging {
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1), 0 0 15px var(--glow-color);
         }
 
         .slider-bg {
@@ -149,9 +125,9 @@
             top: 0;
             left: 0;
             width: 0;
-            height: 50px;
+            height: 40px;
             background-color: var(--hover-color);
-            border-radius: 25px;
+            border-radius: 20px;
             z-index: 1;
             transition: all 0.3s ease;
         }
@@ -163,117 +139,45 @@
             -moz-user-select: none;
             -ms-user-select: none;
             user-select: none;
+            font-size: 14px;
+            /* 新增过渡效果 */
+            transition: opacity 0.3s ease;
         }
 
-        .verified {
-            background-color: var(--hover-color);
-            color: white;
-            animation: verifySuccess 0.3s ease;
-        }
-
-        @keyframes verifySuccess {
-            0% {
-                background-color: #F5EBE0;
-            }
-            100% {
-                background-color: var(--hover-color);
-            }
-        }
-
-        .verify-fail {
-            animation: verifyFail 0.3s ease;
-        }
-
-        @keyframes verifyFail {
-            0% {
-                transform: translateX(0);
-            }
-            25% {
-                transform: translateX(-8px);
-            }
-            50% {
-                transform: translateX(8px);
-            }
-            75% {
-                transform: translateX(-8px);
-            }
-            100% {
-                transform: translateX(0);
-            }
-        }
-
-        /* 呼吸灯效果 */
-        .loading {
-            animation: breathing 1.5s ease-in-out infinite;
-            opacity: 0.5;
-            margin-top: 20px;
+        footer {
             color: var(--primary-color);
-            font-size: 18px;
+            margin-top: 30px;
+            font-size: 14px;
+            text-align: center;
+            padding: 15px;
         }
 
-        @keyframes breathing {
-            0% {
-                opacity: 0.5;
-            }
-            50% {
-                opacity: 1;
-            }
-            100% {
-                opacity: 0.5;
-            }
-        }
-
-        /* 加载提示样式 */
-        #loading {
-            color: var(--primary-color);
-            font-size: 18px;
-        }
-
-        /* 背景虚化层 */
-        #blur-overlay {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            backdrop-filter: blur(5px);
-            z-index: 4;
-        }
-
-        /* 虚化除点击按钮外的其他元素 */
-        .blur-except-button {
-            filter: blur(5px);
-        }
-
-        /* 悬浮窗样式 */
         #update-float {
             position: fixed;
-            right: 30px;
+            right: 15px;
             top: 50%;
             transform: translateY(-50%);
             background-color: var(--secondary-color);
             color: var(--primary-color);
-            padding: 15px 20px;
-            border-radius: 12px;
-            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.1);
+            padding: 10px 15px;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
             transition: all 0.3s ease;
-            font-size: 16px;
+            font-size: 14px;
             z-index: 5;
         }
 
         #update-float:hover {
             background-color: var(--hover-color);
             transform: translateY(-50%) scale(1.05);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 0 10px var(--glow-color);
         }
 
-        /* 鼠标光环样式 */
         #mouse-halo {
             position: fixed;
-            width: 80px;
-            height: 80px;
+            width: 60px;
+            height: 60px;
             border-radius: 50%;
             background: radial-gradient(circle, rgba(255, 171, 92, 0.4) 0%, rgba(255, 194, 111, 0) 80%);
             pointer-events: none;
@@ -297,6 +201,108 @@
                 opacity: 0.6;
             }
         }
+
+        /* 竖屏样式 */
+        @media (orientation: portrait) {
+            #current-time {
+                display: none;
+            }
+
+            .footer-text-remove {
+                display: none;
+            }
+
+            .button-container {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            button {
+                width: 100%;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .slider-container {
+                max-width: 300px;
+                height: 35px;
+                line-height: 35px;
+            }
+
+            .slider,
+            .slider-bg {
+                width: 35px;
+                height: 35px;
+            }
+
+            .slider-text {
+                font-size: 12px;
+            }
+
+            footer {
+                font-size: 12px;
+            }
+
+            #update-float {
+                font-size: 12px;
+                padding: 8px 12px;
+            }
+        }
+
+        /* 横屏样式 */
+        @media (orientation: landscape) {
+            .button-container {
+                flex-direction: row;
+            }
+
+            button {
+                width: calc(33.33% - 10px);
+            }
+        }
+
+        /* 关闭按钮样式 */
+        #close-verification {
+            position: absolute;
+            top: -15px;
+            right: -15px;
+            width: 25px;
+            height: 25px;
+            background-color: #ff4444;
+            color: white;
+            border-radius: 50%;
+            text-align: center;
+            line-height: 25px;
+            cursor: pointer;
+            font-size: 18px;
+            z-index: 11;
+        }
+
+        /* 灵动岛提示样式 */
+        #island-alert {
+            position: fixed;
+            top: 10px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: rgba(0, 0, 0, 0.8);
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            z-index: 9999;
+            text-align: center;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+            /* 优化过渡效果 */
+            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+            width: auto;
+            opacity: 0;
+        }
+
+        #island-alert.show {
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -306,9 +312,10 @@
     <h1>欢迎来到网站快捷访问程序</h1>
     <!-- 滑块验证容器 -->
     <div class="slider-container" id="sliderContainer">
+        <div id="close-verification">×</div>
         <div class="slider-bg" id="sliderBg"></div>
         <div class="slider" id="slider"></div>
-        <span class="slider-text" id="sliderText">请拖动滑块进行验证</span>
+        <span class="slider-text" id="sliderText">大泡未来终端</span>
     </div>
     <!-- 加载提示 -->
     <div id="loading" class="loading" style="display: none;">加载中······</div>
@@ -328,17 +335,28 @@
         <button onclick="openLink(this, 'https://yyc-html.github.io/yyc.github.io/666.html')">计算器</button>
     </div>
     <!-- 悬浮窗 -->
-    <div id="update-float" onclick="checkUpdate(https://yyc-html.github.io/yyc.github.io/update.html)">检查更新</div>
+    <div id="update-float" onclick="checkUpdate('https://yyc-html.github.io/yyc.github.io/update.html')">检查更新</div>
     <!-- 鼠标光环 -->
     <div id="mouse-halo"></div>
+    <!-- 灵动岛提示 -->
+    <div id="island-alert">
+        <span id="island-text">大泡未来终端</span>
+    </div>
     <footer>
-        <span class="footer-text-remove">更多网站链接正在接入中，敬请期待！   </span>大泡未来终端信息化技术与消费者业务部门  x  予译  联合制作    版本：3.6.2  Version：3.6.2
+        <span class="footer-text-remove">更多网站链接正在接入中，敬请期待！   </span>大泡未来终端信息化技术与消费者业务部门  x  予译  联合制作    版本：3.8.7  Version：3.8.7
     </footer>
 
     <script>
         const blurOverlay = document.getElementById('blur-overlay');
         const loadingElement = document.getElementById('loading');
         const mouseHalo = document.getElementById('mouse-halo');
+        const slider = document.getElementById('slider');
+        const sliderContainer = document.getElementById('sliderContainer');
+        const closeVerification = document.getElementById('close-verification');
+        const islandAlert = document.getElementById('island-alert');
+        const islandText = document.getElementById('island-text');
+        const originalText = '大泡未来终端';
+        const sliderText = document.getElementById('sliderText');
 
         // 使用本地时间
         function getLocalTime() {
@@ -359,19 +377,27 @@
         // 页面加载时显示本地时间
         getLocalTime();
 
+        // 页面加载完成时显示连接网络成功提示
+        window.addEventListener('load', () => {
+            showIslandAlert('连接网络成功！');
+            showSliderText('连接网络成功！');
+        });
+
         let isVerified = false;
-        const sliderContainer = document.getElementById('sliderContainer');
-        const slider = document.getElementById('slider');
         const sliderBg = document.getElementById('sliderBg');
-        const sliderText = document.getElementById('sliderText');
         let isDragging = false;
         let startX;
+        let initialSliderLeft = 0;
 
         slider.addEventListener('mousedown', (e) => {
             console.log('滑块按下');
             isDragging = true;
             startX = e.clientX;
+            // 确保初始位置正确获取
+            initialSliderLeft = slider.offsetLeft;
             e.preventDefault();
+            slider.classList.add('dragging');
+            showSliderText('请拖动滑块进行验证');
         });
 
         document.addEventListener('mousemove', (e) => {
@@ -379,8 +405,10 @@
                 console.log('滑块拖动中');
                 const rect = sliderContainer.getBoundingClientRect();
                 const offsetX = e.clientX - startX;
-                const newX = Math.max(0, Math.min(offsetX, rect.width - slider.offsetWidth));
+                const newX = Math.max(0, Math.min(initialSliderLeft + offsetX, rect.width - slider.offsetWidth));
+                // 更新滑块位置
                 slider.style.left = newX + 'px';
+                // 更新背景进度条
                 sliderBg.style.width = newX + 'px';
             }
             // 更新鼠标光环位置
@@ -393,22 +421,50 @@
                 console.log('滑块释放');
                 isDragging = false;
                 const rect = sliderContainer.getBoundingClientRect();
-                if (slider.offsetLeft >= rect.width - slider.offsetWidth) {
+                if (slider.offsetLeft >= rect.width - slider.offsetWidth - 2) { // 减少判定误差
                     // 验证成功
                     isVerified = true;
                     sliderContainer.classList.add('verified');
-                    sliderText.textContent = '验证成功';
+                    showSliderText('验证成功！');
+                    showIslandAlert('验证成功！');
+                    // 验证成功后给滑块添加动画
+                    slider.style.animation = 'slideBack 0.5s ease-in-out forwards';
                 } else {
                     // 验证失败
                     sliderContainer.classList.add('verify-fail');
+                    showSliderText('验证失败，请重试！');
+                    showIslandAlert('验证失败，请重试！');
                     setTimeout(() => {
                         sliderContainer.classList.remove('verify-fail');
                         slider.style.left = 0;
                         sliderBg.style.width = 0;
-                    }, 300);
+                        showSliderText(originalText);
+                    }, 2000);
                 }
+                slider.classList.remove('dragging');
             }
         });
+
+        // 确保动画结束后清除动画属性
+        slider.addEventListener('animationend', () => {
+            slider.style.animation = '';
+            showSliderText(originalText);
+        });
+
+        // 滑块验证成功后返回动画
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideBack {
+                0% {
+                    left: calc(100% - 40px);
+                }
+                100% {
+                    left: 0;
+                    background-color: var(--secondary-color);
+                }
+            }
+        `;
+        document.head.appendChild(style);
 
         function openLink(button, url) {
             if (isVerified) {
@@ -419,31 +475,68 @@
                 allElements.forEach(element => {
                     element.classList.add('blur-except-button');
                 });
+                // 显示灵动岛提示
+                const siteName = button.textContent;
+                showIslandAlert(`正在打开${siteName}`);
+                showSliderText(`正在打开${siteName}`);
                 // 重置验证状态和滑块位置
                 isVerified = false;
                 sliderContainer.classList.remove('verified');
                 slider.style.left = 0;
                 sliderBg.style.width = 0;
-                sliderText.textContent = '请拖动滑块进行验证';
 
-                window.open(url, '_blank');
-
-                // 一段时间后隐藏背景虚化层
                 setTimeout(() => {
-                    blurOverlay.style.display = 'none';
-                    allElements.forEach(element => {
-                        element.classList.remove('blur-except-button');
-                    });
+                    showIslandAlert(`成功跳转至${siteName}`);
+                    showSliderText(`成功跳转至${siteName}`);
+                    setTimeout(() => {
+                        window.open(url, '_blank');
+                        // 一段时间后隐藏背景虚化层
+                        blurOverlay.style.display = 'none';
+                        allElements.forEach(element => {
+                            element.classList.remove('blur-except-button');
+                        });
+                        showSliderText(originalText);
+                    }, 1000);
                 }, 1000);
             } else {
                 alert('请先完成滑块验证');
+                showSliderText('请先完成滑块验证');
             }
         }
 
-        // 检查更新函数，后续可修改跳转链接
-        function checkUpdate() {
-            // 这里替换为实际的更新链接
-            window.open('https://example.com', '_blank');
+        // 检查更新函数，接收更新链接作为参数
+        function checkUpdate(updateUrl) {
+            // 使用传入的更新链接
+            window.open(updateUrl, '_blank');
+            showIslandAlert(`成功跳转至更新页面`);
+            showSliderText(`成功跳转至更新页面`);
+            setTimeout(() => {
+                showSliderText(originalText);
+            }, 2000);
+        }
+
+        // 关闭验证窗口功能
+        closeVerification.addEventListener('click', () => {
+            isVerified = false;
+            slider.style.left = 0;
+            sliderBg.style.width = 0;
+            showSliderText('请拖动滑块进行验证');
+        });
+
+        // 显示灵动岛提示的函数
+        function showIslandAlert(message) {
+            islandText.textContent = message;
+            islandAlert.classList.add('show');
+            // 移除定时器，让灵动岛永久显示
+        }
+
+        // 显示滑块文字的函数
+        function showSliderText(message) {
+            sliderText.style.opacity = 0;
+            setTimeout(() => {
+                sliderText.textContent = message;
+                sliderText.style.opacity = 1;
+            }, 300);
         }
     </script>
 </body>
