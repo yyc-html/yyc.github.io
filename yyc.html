@@ -26,15 +26,20 @@
             justify-content: center;
             overflow-y: auto;
             min-height: 100vh;
+            transition: background-color 0.3s ease;
+            scroll-behavior: smooth;
         }
 
         h1 {
             color: var(--primary-color);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
             margin: 20px 0 30px 0;
+            margin-left: 200px;
             font-size: 28px;
             font-weight: bold;
             text-align: center;
+            transition: all 0.3s ease;
+            width: calc(80% - 200px);
         }
 
         #current-time {
@@ -45,36 +50,142 @@
             font-weight: bold;
             color: var(--primary-color);
             text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        /* 分类栏样式 */
+        .category-bar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            height: 100vh;
+            width: 200px;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-right: 1px solid rgba(255, 255, 255, 0.18);
+            padding: 20px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            z-index: 10;
+            overflow-y: auto;
+            scroll-behavior: smooth;
+        }
+
+        .category-bar::-webkit-scrollbar {
+            width: 6px;
+        }
+
+        .category-bar::-webkit-scrollbar-thumb {
+            background-color: rgba(0, 0, 0, 0.2);
+            border-radius: 3px;
+        }
+
+        .category-item {
+            padding: 10px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 20px;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .category-item::before {
+            content: "";
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .category-item:hover::before {
+            left: 100%;
+        }
+
+        .category-item:hover {
+            background-color: var(--hover-color);
+            transform: translateX(5px);
+        }
+
+        .category-item.active {
+            background-color: var(--secondary-color);
+            transform: translateX(5px);
+        }
+
+        /* 滑块和按钮容器整体样式 */
+        .main-content {
+            max-width: calc(80% - 200px);
+            margin-left: 200px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.5s ease;
         }
 
         .button-container {
             display: flex;
             flex-wrap: wrap;
-            max-width: 80%;
             justify-content: space-between;
             gap: 10px;
-            margin: 20px auto;
+            width: 100%;
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease;
+        }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         button {
-            padding: 10px 20px;
-            font-size: 16px;
+            /* 增加内边距 */
+            padding: 15px 25px;
+            min-width: 0;
+            flex-grow: 1;
+            flex-shrink: 1;
+            /* 增大字体大小 */
+            font-size: 18px;
             background-color: var(--secondary-color);
             color: var(--primary-color);
             border: none;
-            border-radius: 10px;
+            border-radius: 20px;
             cursor: pointer;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            white-space: nowrap;
-            overflow: hidden;
-            text-overflow: ellipsis;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            white-space: normal;
+            overflow: visible;
+            text-overflow: clip;
+            word-wrap: break-word;
+            line-height: 1.2;
         }
 
         button:hover {
             background-color: var(--hover-color);
             transform: translateY(-3px);
             box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15), 0 0 10px var(--glow-color);
+            animation: pulseButton 1s infinite;
+        }
+
+        @keyframes pulseButton {
+            0% {
+                transform: translateY(-3px) scale(1);
+            }
+            50% {
+                transform: translateY(-3px) scale(1.05);
+            }
+            100% {
+                transform: translateY(-3px) scale(1);
+            }
         }
 
         button:active {
@@ -88,13 +199,13 @@
             height: 40px;
             background-color: #F5EBE0;
             border-radius: 20px;
-            margin: 20px auto;
+            margin: 0 auto;
             text-align: center;
             line-height: 40px;
             color: var(--primary-color);
             overflow: hidden;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: box-shadow 0.3s ease;
+            transition: box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider-container.verify-fail {
@@ -112,7 +223,7 @@
             cursor: pointer;
             z-index: 2;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider:hover,
@@ -129,7 +240,7 @@
             background-color: var(--hover-color);
             border-radius: 20px;
             z-index: 1;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         .slider-text {
@@ -140,8 +251,7 @@
             -ms-user-select: none;
             user-select: none;
             font-size: 14px;
-            /* 新增过渡效果 */
-            transition: opacity 0.3s ease;
+            transition: opacity 0.3s cubic-bezier(0.4, 0, 0.2, 1);
         }
 
         footer {
@@ -150,6 +260,9 @@
             font-size: 14px;
             text-align: center;
             padding: 15px;
+            transition: all 0.3s ease;
+            margin-left: 200px;
+            width: calc(80% - 200px);
         }
 
         #update-float {
@@ -160,10 +273,10 @@
             background-color: var(--secondary-color);
             color: var(--primary-color);
             padding: 10px 15px;
-            border-radius: 10px;
+            border-radius: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             cursor: pointer;
-            transition: all 0.3s ease;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
             font-size: 14px;
             z-index: 5;
         }
@@ -212,6 +325,16 @@
                 display: none;
             }
 
+            h1 {
+                margin-left: 0;
+                width: 80%;
+            }
+
+            .main-content {
+                max-width: 80%;
+                margin-left: 0;
+            }
+
             .button-container {
                 flex-direction: column;
                 align-items: center;
@@ -219,6 +342,8 @@
 
             button {
                 width: 100%;
+                /* 竖屏增大字体大小 */
+                font-size: 16px;
             }
 
             h1 {
@@ -242,12 +367,18 @@
             }
 
             footer {
+                margin-left: 0;
+                width: 80%;
                 font-size: 12px;
             }
 
             #update-float {
                 font-size: 12px;
                 padding: 8px 12px;
+            }
+
+            .category-bar {
+                display: none;
             }
         }
 
@@ -258,7 +389,8 @@
             }
 
             button {
-                width: calc(33.33% - 10px);
+                /* 横屏增大字体大小 */
+                font-size: 16px;
             }
         }
 
@@ -278,31 +410,6 @@
             font-size: 18px;
             z-index: 11;
         }
-
-        /* 灵动岛提示样式 */
-        #island-alert {
-            position: fixed;
-            top: 10px;
-            left: 50%;
-            transform: translateX(-50%);
-            background-color: rgba(0, 0, 0, 0.8);
-            color: white;
-            padding: 10px 20px;
-            border-radius: 20px;
-            z-index: 9999;
-            text-align: center;
-            overflow: hidden;
-            white-space: nowrap;
-            text-overflow: ellipsis;
-            /* 优化过渡效果 */
-            transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
-            width: auto;
-            opacity: 0;
-        }
-
-        #island-alert.show {
-            opacity: 1;
-        }
     </style>
 </head>
 
@@ -310,38 +417,71 @@
     <div id="blur-overlay"></div>
     <div id="current-time"></div>
     <h1>欢迎来到网站快捷访问程序</h1>
-    <!-- 滑块验证容器 -->
-    <div class="slider-container" id="sliderContainer">
-        <div id="close-verification">×</div>
-        <div class="slider-bg" id="sliderBg"></div>
-        <div class="slider" id="slider"></div>
-        <span class="slider-text" id="sliderText">大泡未来终端</span>
+    <!-- 分类栏 -->
+    <div class="category-bar">
+        <div class="category-item active" data-category="all">全部</div>
+        <div class="category-item" data-category="ai">人工智能</div>
+        <div class="category-item" data-category="ecommerce">电商</div>
+        <div class="category-item" data-category="social">社交</div>
+        <div class="category-item" data-category="tech">科技</div>
+        <div class="category-item" data-category="tool">工具</div>
     </div>
-    <!-- 加载提示 -->
-    <div id="loading" class="loading" style="display: none;">加载中······</div>
-    <div class="button-container" id="buttonContainer">
-        <button onclick="openLink(this, 'https://www.doubao.com')">豆包</button>
-        <button onclick="openLink(this, 'https://www.douyin.com')">抖音</button>
-        <button onclick="openLink(this, 'https://www.jd.com')">京东</button>
-        <button onclick="openLink(this, 'https://www.apple.com.cn')">Apple（中国大陆）</button>
-        <button onclick="openLink(this, 'https://www.taobao.com')">淘宝</button>
-        <button onclick="openLink(this, 'https://consumer.huawei.com/cn/')">华为（消费者业务）</button>
-        <button onclick="openLink(this, 'https://www.oppo.com/cn/smartphones/')">OPPO</button>
-        <button onclick="openLink(this, 'https://www.vivo.com.cn/brand/about')">vivo</button>
-        <button onclick="openLink(this, 'https://weixin.qq.com/')">微信</button>
-        <button onclick="openLink(this, 'https://im.qq.com/index/')">QQ</button>
-        <button onclick="openLink(this, 'https://easinote.seewo.com/')">希沃白板</button>
-        <button onclick="openLink(this, 'https://www.mi.com/index.html')">小米（消费者业务）</button>
-        <button onclick="openLink(this, 'https://yyc-html.github.io/yyc.github.io/666.html')">计算器</button>
+    <!-- 滑块和按钮容器整体 -->
+    <div class="main-content">
+        <!-- 滑块验证容器 -->
+        <div class="slider-container" id="sliderContainer">
+            <div id="close-verification">×</div>
+            <div class="slider-bg" id="sliderBg"></div>
+            <div class="slider" id="slider"></div>
+            <span class="slider-text" id="sliderText">大泡未来终端</span>
+        </div>
+        <!-- 加载提示 -->
+        <div id="loading" class="loading" style="display: none;">加载中······</div>
+        <div class="button-container" id="buttonContainer">
+            <!-- AI 分类 -->
+            <button onclick="openLink(this, 'https://www.doubao.com')" data-category="ai">豆包</button>
+            <button onclick="openLink(this, 'https://www.wenxin.baidu.com')" data-category="ai">文心一言</button>
+            <button onclick="openLink(this, 'https://spark.ai')" data-category="ai">讯飞星火</button>
+
+            <!-- 电商分类 -->
+            <button onclick="openLink(this, 'https://www.jd.com')" data-category="ecommerce">京东</button>
+            <button onclick="openLink(this, 'https://www.taobao.com')" data-category="ecommerce">淘宝</button>
+            <button onclick="openLink(this, 'https://www.alipay.com')" data-category="ecommerce">支付宝</button>
+            <button onclick="openLink(this, 'https://www.pinduoduo.com')" data-category="ecommerce">拼多多</button>
+            <button onclick="openLink(this, 'https://www.amazon.cn')" data-category="ecommerce">亚马逊中国</button>
+
+            <!-- 社交分类 -->
+            <button onclick="openLink(this, 'https://www.douyin.com')" data-category="social">抖音</button>
+            <button onclick="openLink(this, 'https://weixin.qq.com/')" data-category="social">微信</button>
+            <button onclick="openLink(this, 'https://im.qq.com/index/')" data-category="social">QQ</button>
+            <button onclick="openLink(this, 'https://www.xiaohongshu.com')" data-category="social">小红书</button>
+            <button onclick="openLink(this, 'https://www.weibo.com')" data-category="social">微博</button>
+            <button onclick="openLink(this, 'https://tim.qq.com/')" data-category="social">TIM</button>
+
+            <!-- 科技分类 -->
+            <button onclick="openLink(this, 'https://www.apple.com.cn')" data-category="tech">Apple（中国大陆）</button>
+            <button onclick="openLink(this, 'https://consumer.huawei.com/cn/')" data-category="tech">华为（消费者业务）</button>
+            <button onclick="openLink(this, 'https://www.oppo.com/cn/smartphones/')" data-category="tech">OPPO</button>
+            <button onclick="openLink(this, 'https://www.vivo.com.cn/brand/about')" data-category="tech">vivo</button>
+            <button onclick="openLink(this, 'https://www.mi.com/index.html')" data-category="tech">小米（消费者业务）</button>
+            <button onclick="openLink(this, 'https://www.bytedance.com')" data-category="tech">字节跳动</button>
+            <button onclick="openLink(this, 'https://www.baidu.com')" data-category="tech">百度</button>
+            <button onclick="openLink(this, 'https://www.sogou.com')" data-category="tech">搜狗</button>
+
+            <!-- 工具分类 -->
+            <button onclick="openLink(this, 'https://easinote.seewo.com/')" data-category="tool">希沃白板</button>
+            <button onclick="openLink(this, 'https://yyc-html.github.io/yyc.github.io/666.html')" data-category="tool">计算器</button>
+            <button onclick="openLink(this, 'https://www.processon.com')" data-category="tool">ProcessOn</button>
+            <button onclick="openLink(this, 'https://www.figma.com')" data-category="tool">Figma</button>
+            <button onclick="openLink(this, 'https://www.canva.cn')" data-category="tool">Canva可画</button>
+            <button onclick="openLink(this, 'https://www.office.com')" data-category="tool">Microsoft Office</button>
+            <button onclick="openLink(this, 'https://www.adobe.com/cn')" data-category="tool">Adobe</button>
+        </div>
     </div>
     <!-- 悬浮窗 -->
     <div id="update-float" onclick="checkUpdate('https://yyc-html.github.io/yyc.github.io/update.html')">检查更新</div>
     <!-- 鼠标光环 -->
     <div id="mouse-halo"></div>
-    <!-- 灵动岛提示 -->
-    <div id="island-alert">
-        <span id="island-text">大泡未来终端</span>
-    </div>
     <footer>
         <span class="footer-text-remove">更多网站链接正在接入中，敬请期待！   </span>大泡未来终端信息化技术与消费者业务部门  x  予译  联合制作    版本：3.8.7  Version：3.8.7
     </footer>
@@ -353,10 +493,11 @@
         const slider = document.getElementById('slider');
         const sliderContainer = document.getElementById('sliderContainer');
         const closeVerification = document.getElementById('close-verification');
-        const islandAlert = document.getElementById('island-alert');
-        const islandText = document.getElementById('island-text');
-        const originalText = '大泡未来终端';
         const sliderText = document.getElementById('sliderText');
+        const originalText = '大泡未来终端';
+        const categoryItems = document.querySelectorAll('.category-item');
+        const buttons = document.querySelectorAll('#buttonContainer button');
+        const mainContent = document.querySelector('.main-content');
 
         // 使用本地时间
         function getLocalTime() {
@@ -379,7 +520,6 @@
 
         // 页面加载完成时显示连接网络成功提示
         window.addEventListener('load', () => {
-            showIslandAlert('连接网络成功！');
             showSliderText('连接网络成功！');
         });
 
@@ -389,6 +529,7 @@
         let startX;
         let initialSliderLeft = 0;
 
+        // 鼠标按下事件
         slider.addEventListener('mousedown', (e) => {
             console.log('滑块按下');
             isDragging = true;
@@ -400,6 +541,19 @@
             showSliderText('请拖动滑块进行验证');
         });
 
+        // 触摸开始事件
+        slider.addEventListener('touchstart', (e) => {
+            console.log('滑块触摸开始');
+            isDragging = true;
+            startX = e.touches[0].clientX;
+            // 确保初始位置正确获取
+            initialSliderLeft = slider.offsetLeft;
+            e.preventDefault();
+            slider.classList.add('dragging');
+            showSliderText('请拖动滑块进行验证');
+        });
+
+        // 鼠标移动事件
         document.addEventListener('mousemove', (e) => {
             if (isDragging) {
                 console.log('滑块拖动中');
@@ -416,6 +570,28 @@
             mouseHalo.style.top = e.clientY + 'px';
         });
 
+        // 触摸移动事件
+        document.addEventListener('touchmove', (e) => {
+            if (isDragging) {
+                console.log('滑块触摸拖动中');
+                const rect = sliderContainer.getBoundingClientRect();
+                const offsetX = e.touches[0].clientX - startX;
+                const newX = Math.max(0, Math.min(initialSliderLeft + offsetX, rect.width - slider.offsetWidth));
+                // 更新滑块位置
+                slider.style.left = newX + 'px';
+                // 更新背景进度条
+                sliderBg.style.width = newX + 'px';
+            }
+            // 更新鼠标光环位置
+            const touch = e.touches[0];
+            if (touch) {
+                mouseHalo.style.left = touch.clientX + 'px';
+                mouseHalo.style.top = touch.clientY + 'px';
+            }
+            e.preventDefault(); // 防止页面滚动
+        });
+
+        // 鼠标释放事件
         document.addEventListener('mouseup', () => {
             if (isDragging) {
                 console.log('滑块释放');
@@ -426,14 +602,36 @@
                     isVerified = true;
                     sliderContainer.classList.add('verified');
                     showSliderText('验证成功！');
-                    showIslandAlert('验证成功！');
-                    // 验证成功后给滑块添加动画
-                    slider.style.animation = 'slideBack 0.5s ease-in-out forwards';
                 } else {
                     // 验证失败
                     sliderContainer.classList.add('verify-fail');
                     showSliderText('验证失败，请重试！');
-                    showIslandAlert('验证失败，请重试！');
+                    setTimeout(() => {
+                        sliderContainer.classList.remove('verify-fail');
+                        slider.style.left = 0;
+                        sliderBg.style.width = 0;
+                        showSliderText(originalText);
+                    }, 2000);
+                }
+                slider.classList.remove('dragging');
+            }
+        });
+
+        // 触摸结束事件
+        document.addEventListener('touchend', () => {
+            if (isDragging) {
+                console.log('滑块触摸结束');
+                isDragging = false;
+                const rect = sliderContainer.getBoundingClientRect();
+                if (slider.offsetLeft >= rect.width - slider.offsetWidth - 2) { // 减少判定误差
+                    // 验证成功
+                    isVerified = true;
+                    sliderContainer.classList.add('verified');
+                    showSliderText('验证成功！');
+                } else {
+                    // 验证失败
+                    sliderContainer.classList.add('verify-fail');
+                    showSliderText('验证失败，请重试！');
                     setTimeout(() => {
                         sliderContainer.classList.remove('verify-fail');
                         slider.style.left = 0;
@@ -467,6 +665,10 @@
         document.head.appendChild(style);
 
         function openLink(button, url) {
+            if (window.matchMedia("(orientation: portrait)").matches) {
+                alert('当前屏幕比例下不支持一些功能，请前往横屏版使用');
+                return;
+            }
             if (isVerified) {
                 // 显示背景虚化层
                 blurOverlay.style.display = 'block';
@@ -475,19 +677,25 @@
                 allElements.forEach(element => {
                     element.classList.add('blur-except-button');
                 });
-                // 显示灵动岛提示
-                const siteName = button.textContent;
-                showIslandAlert(`正在打开${siteName}`);
-                showSliderText(`正在打开${siteName}`);
+                showSliderText(`正在打开${button.textContent}`);
                 // 重置验证状态和滑块位置
                 isVerified = false;
                 sliderContainer.classList.remove('verified');
                 slider.style.left = 0;
                 sliderBg.style.width = 0;
 
+                // 添加切换时的滚动效果
+                mainContent.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+
+                // 为按钮容器添加动画
+                const buttonContainer = document.getElementById('buttonContainer');
+                buttonContainer.style.animation = 'fadeInUp 0.5s ease';
+
                 setTimeout(() => {
-                    showIslandAlert(`成功跳转至${siteName}`);
-                    showSliderText(`成功跳转至${siteName}`);
+                    showSliderText(`成功跳转至${button.textContent}`);
                     setTimeout(() => {
                         window.open(url, '_blank');
                         // 一段时间后隐藏背景虚化层
@@ -496,6 +704,8 @@
                             element.classList.remove('blur-except-button');
                         });
                         showSliderText(originalText);
+                        // 清除动画
+                        buttonContainer.style.animation = '';
                     }, 1000);
                 }, 1000);
             } else {
@@ -508,7 +718,6 @@
         function checkUpdate(updateUrl) {
             // 使用传入的更新链接
             window.open(updateUrl, '_blank');
-            showIslandAlert(`成功跳转至更新页面`);
             showSliderText(`成功跳转至更新页面`);
             setTimeout(() => {
                 showSliderText(originalText);
@@ -523,13 +732,6 @@
             showSliderText('请拖动滑块进行验证');
         });
 
-        // 显示灵动岛提示的函数
-        function showIslandAlert(message) {
-            islandText.textContent = message;
-            islandAlert.classList.add('show');
-            // 移除定时器，让灵动岛永久显示
-        }
-
         // 显示滑块文字的函数
         function showSliderText(message) {
             sliderText.style.opacity = 0;
@@ -538,6 +740,38 @@
                 sliderText.style.opacity = 1;
             }, 300);
         }
+
+        // 分类栏点击事件
+        categoryItems.forEach(item => {
+            item.addEventListener('click', () => {
+                categoryItems.forEach(i => i.classList.remove('active'));
+                item.classList.add('active');
+                const category = item.dataset.category;
+                buttons.forEach(button => {
+                    if (category === 'all' || button.dataset.category === category) {
+                        button.style.display = 'block';
+                    } else {
+                        button.style.display = 'none';
+                    }
+                });
+                // 添加分类切换时的滚动效果
+                mainContent.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'start'
+                });
+                // 为分类按钮添加滑动动画
+                item.scrollIntoView({
+                    behavior: 'smooth',
+                    block: 'nearest'
+                });
+                // 为按钮容器添加动画
+                const buttonContainer = document.getElementById('buttonContainer');
+                buttonContainer.style.animation = 'fadeInUp 0.5s ease';
+                setTimeout(() => {
+                    buttonContainer.style.animation = '';
+                }, 500);
+            });
+        });
     </script>
 </body>
 
