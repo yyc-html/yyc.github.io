@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>手工迷你环保垃圾桶 - 绿色创意介绍</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#388E3C',
+                        secondary: '#81C784',
+                        accent: '#2E7D32',
+                        neutral: '#F5F7F5',
+                        dark: '#1B5E20',
+                        light: '#E8F5E9'
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    },
+                    boxShadow: {
+                        'card': '0 4px 12px rgba(56, 142, 60, 0.05)',
+                        'card-hover': '0 8px 24px rgba(56, 142, 60, 0.12)',
+                        'modal': '0 12px 32px rgba(0, 0, 0, 0.15)',
+                    },
+                    animation: {
+                        'fade-in': 'fadeIn 0.3s ease forwards',
+                        'scale-up': 'scaleUp 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards',
+                        'slide-up': 'slideUp 0.4s ease forwards',
+                        'pulse-soft': 'pulseSoft 2s infinite',
+                        'bounce-slow': 'bounceSlow 2s infinite',
+                    },
+                    keyframes: {
+                        fadeIn: {
+                            '0%': { opacity: '0' },
+                            '100%': { opacity: '1' },
+                        },
+                        scaleUp: {
+                            '0%': { transform: 'scale(0.92) translateY(8px)', opacity: '0' },
+                            '100%': { transform: 'scale(1) translateY(0)', opacity: '1' },
+                        },
+                        slideUp: {
+                            '0%': { transform: 'translateY(15px)', opacity: '0' },
+                            '100%': { transform: 'translateY(0)', opacity: '1' },
+                        },
+                        pulseSoft: {
+                            '0%, 100%': { boxShadow: '0 4px 12px rgba(56, 142, 60, 0.05)' },
+                            '50%': { boxShadow: '0 6px 16px rgba(56, 142, 60, 0.08)' },
+                        },
+                        bounceSlow: {
+                            '0%, 100%': { transform: 'translateY(0)' },
+                            '50%': { transform: 'translateY(10px)' },
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .content-auto {
+                content-visibility: auto;
+            }
+            .text-shadow {
+                text-shadow: 0 2px 4px rgba(0,0,0,0.08);
+            }
+            .rotate-icon {
+                transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .rotate-icon.open {
+                transform: rotate(180deg);
+            }
+            .section-wrapper {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .section-wrapper.open {
+                max-height: 2000px;
+            }
+            .subsection-wrapper {
+                max-height: 0;
+                overflow: hidden;
+                transition: max-height 0.45s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .subsection-wrapper.open {
+                max-height: 1000px;
+            }
+            .card-transition {
+                transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+            }
+            .bg-gradient-primary {
+                background: linear-gradient(135deg, #388E3C 0%, #2E7D32 100%);
+            }
+            .modal-backdrop {
+                opacity: 0;
+                visibility: hidden;
+                transition: opacity 0.3s ease, visibility 0.3s ease;
+                backdrop-filter: blur(6px);
+            }
+            .modal-backdrop.active {
+                opacity: 1;
+                visibility: visible;
+                animation: fadeIn 0.3s ease forwards;
+            }
+            .custom-scrollbar::-webkit-scrollbar {
+                width: 6px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-track {
+                background: #F5F7F5;
+                border-radius: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb {
+                background: #C8E6C9;
+                border-radius: 10px;
+            }
+            .custom-scrollbar::-webkit-scrollbar-thumb:hover {
+                background: #A5D6A7;
+            }
+            .scroll-indicator {
+                cursor: pointer;
+                transition: all 0.3s ease;
+            }
+            .scroll-indicator:hover {
+                transform: scale(1.1);
+            }
+        }
+    </style>
+</head>
+<body class="bg-neutral font-sans transition-all duration-500 custom-scrollbar" id="app-body">
+    <!-- 顶部导航 -->
+    <header class="bg-gradient-primary text-white shadow-md transition-all duration-500" id="main-header">
+        <div class="container mx-auto px-4 py-3 flex flex-col justify-center items-center h-full">
+            <div class="flex items-center mb-1">
+                <i class="fa fa-recycle text-2xl text-green-100 mr-3 animate-pulse-soft"></i>
+                <h1 class="text-[clamp(1.3rem,4vw,2.2rem)] font-bold text-center text-shadow transition-all duration-500">
+                    手工迷你环保垃圾桶
+                </h1>
+            </div>
+            <p class="text-center text-white/90 italic text-[clamp(0.85rem,2.2vw,1rem)] transition-all duration-500">
+                巧用日常材料的绿色创意
+            </p>
+            
+            <!-- 向下滑动指示 -->
+            <div class="scroll-indicator absolute bottom-6 left-1/2 transform -translate-x-1/2 animate-bounce-slow">
+                <i class="fa fa-chevron-down text-white/80 text-xl"></i>
+                <p class="text-white/70 text-xs mt-1 text-center">向下滑动查看详情</p>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主内容区 -->
+    <main class="container mx-auto px-4 py-5 max-w-4xl transition-all duration-500" id="main-content">
+        <!-- 简介部分 -->
+        <section class="bg-white rounded-xl shadow-card p-5 mb-6 card-transition hover:shadow-card-hover hover:-translate-y-1 cursor-pointer card-expand" data-card="intro">
+            <div class="flex justify-between items-center toggle-section bg-light p-3 rounded-lg mb-2">
+                <h2 class="text-base md:text-lg font-semibold text-accent flex items-center">
+                    <i class="fa fa-info-circle mr-2 text-primary text-lg"></i>作品简介
+                </h2>
+                <i class="fa fa-chevron-down rotate-icon transition-transform duration-300 text-primary/70 hover:text-primary"></i>
+            </div>
+            <div class="section-wrapper">
+                <div class="p-3 pl-4 border-l-2 border-secondary/30">
+                    <p class="text-gray-700 leading-relaxed text-sm md:text-base">
+                        在环保理念日益深入人心的今天，践行可持续生活并非一定要依赖复杂技术或特殊材料 —— 这款手工迷你垃圾桶，便以雪糕棒、透明胶、纸片等常见日常材料为基础，凭借巧妙的手工设计，将 "环保从身边做起" 的理念具象化，成为兼具实用性与创意感的环保小载体。
+                    </p>
+                </div>
+            </div>
+        </section>
+
+        <!-- 思维导图式二级菜单 -->
+        <div class="space-y-6">
+            <!-- 一级菜单：设计灵感 -->
+            <div class="bg-white rounded-xl shadow-card overflow-hidden card-transition hover:shadow-card-hover hover:-translate-y-1 cursor-pointer card-expand" data-card="inspiration">
+                <!-- 一级标题 -->
+                <div class="flex justify-between items-center bg-gradient-primary text-white p-4 toggle-section">
+                    <h2 class="text-base md:text-xl font-semibold flex items-center">
+                        <i class="fa fa-lightbulb-o mr-3 text-yellow-100 text-lg"></i>
+                        一、设计灵感：源于日常的环保巧思
+                    </h2>
+                    <i class="fa fa-chevron-down rotate-icon transition-transform duration-300"></i>
+                </div>
+                
+                <!-- 二级内容 -->
+                <div class="section-wrapper">
+                    <div class="p-5 text-gray-700 leading-relaxed text-sm md:text-base">
+                        <div class="bg-light rounded-lg p-4 mb-1">
+                            <p class="flex items-start">
+                                <i class="fa fa-comment-o text-primary mt-1 mr-2"></i>
+                                日常生活中，书桌、梳妆台等小空间的细碎垃圾（如纸屑、包装碎渣）常因缺乏便捷收纳工具而随意丢弃，既影响环境整洁，也容易形成 "微小污染"。传统垃圾桶要么体积过大不适合小场景，要么开合方式繁琐降低使用意愿。
+                            </p>
+                        </div>
+                        <div class="bg-light/70 rounded-lg p-4">
+                            <p class="flex items-start">
+                                <i class="fa fa-lightbulb-o text-yellow-500 mt-1 mr-2"></i>
+                                基于这一日常痛点，作品以 "解决微空间收纳需求" 为核心灵感，摒弃对特殊材料或工业加工的依赖，选择雪糕棒、透明胶、纸片这些几乎家家都有的材料，通过手工创作打造适配小场景的迷你垃圾桶，让环保行动从 "随手制作" 开始，更从 "随手收纳" 落地。
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一级菜单：材料与结构 -->
+            <div class="bg-white rounded-xl shadow-card overflow-hidden card-transition hover:shadow-card-hover hover:-translate-y-1 cursor-pointer card-expand" data-card="material">
+                <!-- 一级标题 -->
+                <div class="flex justify-between items-center bg-gradient-primary text-white p-4 toggle-section">
+                    <h2 class="text-base md:text-xl font-semibold flex items-center">
+                        <i class="fa fa-cubes mr-3 text-blue-100 text-lg"></i>
+                        二、材料与结构：日常材料的创意转化
+                    </h2>
+                    <i class="fa fa-chevron-down rotate-icon transition-transform duration-300"></i>
+                </div>
+                
+                <!-- 二级内容 -->
+                <div class="section-wrapper">
+                    <!-- 二级菜单：材料选择 -->
+                    <div class="border-l-4 border-secondary ml-4 pl-5 py-3">
+                        <div class="flex justify-between items-center toggle-subsection mb-1">
+                            <h3 class="text-sm md:text-lg font-medium text-accent flex items-center">
+                                <i class="fa fa-cube mr-2 text-secondary text-lg"></i>（一）材料选择：平凡材料的环保价值
+                            </h3>
+                            <i class="fa fa-chevron-right rotate-icon transition-transform duration-300 text-accent/70 hover:text-accent"></i>
+                        </div>
+                        <div class="subsection-wrapper">
+                            <div class="pl-4 mt-2 bg-light/50 rounded-lg p-4">
+                                <p class="mb-3 text-gray-700 flex items-start">
+                                    <i class="fa fa-info-circle text-primary mt-1 mr-2"></i>
+                                    作品的材料选择本身就蕴含着环保巧思：
+                                </p>
+                                <ul class="list-disc pl-6 space-y-3">
+                                    <li class="text-gray-700 flex items-start">
+                                        <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>
+                                            <span class="font-medium text-accent">雪糕棒：</span>作为常见的食品附属品，用完后往往被直接丢弃，而在此处，它凭借轻便、易裁剪、易拼接的特性，成为垃圾桶主体框架的核心材料，通过手工裁剪与拼接，构建出稳固的桶身结构，让 "不起眼的日常材料" 焕发新用途；
+                                        </span>
+                                    </li>
+                                    <li class="text-gray-700 flex items-start">
+                                        <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>
+                                            <span class="font-medium text-accent">纸片：</span>选用普通纸片作为桶身内壁与桶盖的基础材质，不仅质地轻盈便于配合开合设计，更通过简单的折叠、固定，实现了 "低成本、易获取" 的材料应用，避免了对特殊塑料或金属材质的依赖，减少资源消耗；
+                                        </span>
+                                    </li>
+                                    <li class="text-gray-700 flex items-start">
+                                        <i class="fa fa-check-circle text-green-500 mt-1 mr-2"></i>
+                                        <span>
+                                            <span class="font-medium text-accent">透明胶：</span>作为连接各部件的关键材料，它以便捷的粘合特性，将雪糕棒与纸片牢固拼接，无需复杂工具，全程通过手工操作完成，凸显 "零门槛环保创作" 的理念。
+                                        </span>
+                                    </li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 二级菜单：核心结构 -->
+                    <div class="border-l-4 border-secondary ml-4 pl-5 py-3">
+                        <div class="flex justify-between items-center toggle-subsection mb-1">
+                            <h3 class="text-sm md:text-lg font-medium text-accent flex items-center">
+                                <i class="fa fa-cogs mr-2 text-secondary text-lg"></i>（二）核心结构：踏板式自动抬盖的手工实现
+                            </h3>
+                            <i class="fa fa-chevron-right rotate-icon transition-transform duration-300 text-accent/70 hover:text-accent"></i>
+                        </div>
+                        <div class="subsection-wrapper">
+                            <div class="pl-4 mt-2 bg-light/50 rounded-lg p-4">
+                                <p class="mb-3 text-gray-700 flex items-start">
+                                    <i class="fa fa-star text-yellow-500 mt-1 mr-2"></i>
+                                    作品最亮眼的设计，是纯手工打造的 "压下踏板自动抬盖" 机械结构 —— 无需电力驱动，完全依靠材料特性与手工组装的精度实现功能：
+                                </p>
+                                <div class="bg-white rounded-lg p-3 border border-secondary/20 mb-3">
+                                    <p class="text-gray-700">
+                                        以雪糕棒为骨架，搭建出 "踏板 - 连杆 - 桶盖" 的联动结构：底部踏板由两根雪糕棒交叉固定，连接一根纵向连杆；连杆顶端与桶盖边缘衔接，桶盖则以雪糕棒为轴，固定在桶身顶部；
+                                    </p>
+                                </div>
+                                <div class="bg-white rounded-lg p-3 border border-secondary/20">
+                                    <p class="text-gray-700">
+                                        当脚部轻压踏板时，踏板下沉带动连杆向上推动，桶盖围绕轴点自然抬起，形成约 75° 的开合角度，刚好满足垃圾投入需求；松开踏板后，借助纸片桶盖的轻量化特性，以及连杆与踏板的自然复位，桶盖自动闭合，避免异味散出。
+                                    </p>
+                                </div>
+                                <p class="mt-3 text-gray-700 font-medium">
+                                    整个结构无需任何电子元件，全靠手工测量、裁剪与拼接完成，既体现了手工创作的精细度，也践行了 "无能耗、低成本" 的环保设计原则。
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 一级菜单：作品意义 -->
+            <div class="bg-white rounded-xl shadow-card overflow-hidden card-transition hover:shadow-card-hover hover:-translate-y-1 cursor-pointer card-expand" data-card="meaning">
+                <!-- 一级标题 -->
+                <div class="flex justify-between items-center bg-gradient-primary text-white p-4 toggle-section">
+                    <h2 class="text-base md:text-xl font-semibold flex items-center">
+                        <i class="fa fa-leaf mr-3 text-green-100 text-lg"></i>
+                        三、作品意义：小制作里的环保传递
+                    </h2>
+                    <i class="fa fa-chevron-down rotate-icon transition-transform duration-300"></i>
+                </div>
+                
+                <!-- 二级内容 -->
+                <div class="section-wrapper">
+                    <div class="p-5 text-gray-700 leading-relaxed text-sm md:text-base">
+                        <p class="mb-3">这款迷你垃圾桶虽未涉及循环垃圾功能，却以 "日常材料 + 手工创意" 的组合，传递出独特的环保价值：</p>
+                        
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 my-4">
+                            <div class="bg-light p-4 rounded-lg border border-secondary/20 hover:border-primary/30 transition-all duration-300 hover:shadow-md">
+                                <h4 class="font-medium text-accent mb-2 flex items-center">
+                                    <i class="fa fa-recycle mr-2 text-secondary"></i>材料利用的启发
+                                </h4>
+                                <p class="text-sm text-gray-600">它证明雪糕棒、纸片等看似 "用完即弃" 的日常材料，通过创意设计与手工改造，完全可以转化为实用物品，引导人们重新审视身边的 "小材料"，减少不必要的浪费。</p>
+                            </div>
+                            
+                            <div class="bg-light p-4 rounded-lg border border-secondary/20 hover:border-primary/30 transition-all duration-300 hover:shadow-md">
+                                <h4 class="font-medium text-accent mb-2 flex items-center">
+                                    <i class="fa fa-hand-paper-o mr-2 text-secondary"></i>手工环保的示范
+                                </h4>
+                                <p class="text-sm text-gray-600">无需复杂设备，仅凭双手和常见材料就能完成具有功能性的环保作品，降低了环保行动的 "门槛"，让更多人意识到 "环保不是难事，动手就能参与"。</p>
+                            </div>
+                            
+                            <div class="bg-light p-4 rounded-lg border border-secondary/20 hover:border-primary/30 transition-all duration-300 hover:shadow-md">
+                                <h4 class="font-medium text-accent mb-2 flex items-center">
+                                    <i class="fa fa-home mr-2 text-secondary"></i>微场景的环保覆盖
+                                </h4>
+                                <p class="text-sm text-gray-600">小巧尺寸，完美适配书桌、梳妆台等微空间，解决了小范围垃圾收纳的痛点，让 "即时收纳、保持整洁" 的环保习惯融入日常生活的细节中。</p>
+                            </div>
+                        </div>
+                        
+                        <p>从几根普通雪糕棒，到一张简单的纸片，再到能自动抬盖的迷你垃圾桶，每一步手工制作，都是对 "环保就在身边" 理念的生动诠释 —— 环保无需宏大叙事，从身边小事做起，用创意赋予平凡材料新价值，就是可持续生活的最佳实践。</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <!-- 页脚 -->
+    <footer class="bg-dark text-white py-4 mt-8 transition-all duration-500" id="main-footer">
+        <div class="container mx-auto px-4 text-center flex flex-col justify-center h-full">
+            <p class="text-[clamp(0.9rem,3vw,1.1rem)]">作品创作者：岑予译</p>
+            <p class="mt-1 text-sm text-white/70">2025-08-31 · 环保从身边小事做起</p>
+        </div>
+    </footer>
+
+    <!-- 全屏模态框 -->
+    <div class="modal-backdrop fixed inset-0 z-50 bg-black/80 flex items-center justify-center p-4" id="fullscreen-modal">
+        <div class="modal-content bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto custom-scrollbar">
+            <div class="p-6 border-b flex justify-between items-center modal-header">
+                <h2 class="text-2xl font-bold text-accent" id="modal-title"></h2>
+                <button class="text-gray-500 hover:text-gray-700 text-2xl transition-colors duration-300" id="close-modal">
+                    <i class="fa fa-times"></i>
+                </button>
+            </div>
+            <div class="p-6 modal-body" id="modal-content"></div>
+        </div>
+    </div>
+
+    <script>
+        // 修复点击按钮功能并添加滑动指示交互
+        document.addEventListener('DOMContentLoaded', function() {
+            // 向下滑动指示器功能
+            const scrollIndicator = document.querySelector('.scroll-indicator');
+            if (scrollIndicator) {
+                scrollIndicator.addEventListener('click', function() {
+                    // 平滑滚动到主内容区
+                    document.getElementById('main-content').scrollIntoView({
+                        behavior: 'smooth'
+                    });
+                });
+            }
+
+            // 打开模态框的函数
+            function openModal(card) {
+                const modal = document.getElementById('fullscreen-modal');
+                const modalTitle = document.getElementById('modal-title');
+                const modalContent = document.getElementById('modal-content');
+                
+                // 获取卡片标题和内容
+                const title = card.querySelector('h2').textContent;
+                // 克隆卡片内容（包括已展开的状态）
+                const contentClone = card.cloneNode(true);
+                
+                // 移除不需要的事件和样式
+                const interactiveElements = contentClone.querySelectorAll('.toggle-section, .toggle-subsection');
+                interactiveElements.forEach(el => {
+                    el.classList.remove('toggle-section', 'toggle-subsection', 'cursor-pointer');
+                    el.style.cursor = 'default';
+                });
+                
+                // 确保内容完全展开
+                const sections = contentClone.querySelectorAll('.section-wrapper, .subsection-wrapper');
+                sections.forEach(section => {
+                    section.classList.add('open');
+                    section.style.maxHeight = 'none';
+                });
+
+                // 设置模态框内容
+                modalTitle.textContent = title;
+                modalContent.innerHTML = '';
+                modalContent.appendChild(contentClone);
+                
+                // 显示模态框
+                modal.classList.add('active');
+                document.body.style.overflow = 'hidden'; // 防止背景滚动
+            }
+
+            // 关闭模态框的函数
+            function closeModal() {
+                const modal = document.getElementById('fullscreen-modal');
+                modal.classList.remove('active');
+                document.body.style.overflow = ''; // 恢复滚动
+            }
+
+            // 一级菜单展开/折叠功能，同时打开模态框
+            document.querySelectorAll('.toggle-section').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.rotate-icon');
+                    const card = toggle.closest('.card-expand');
+                    
+                    // 切换展开/折叠状态
+                    content.classList.toggle('open');
+                    icon.classList.toggle('open');
+                    
+                    // 打开模态框
+                    openModal(card);
+                });
+            });
+            
+            // 二级菜单展开/折叠功能
+            document.querySelectorAll('.toggle-subsection').forEach(toggle => {
+                toggle.addEventListener('click', (e) => {
+                    e.stopPropagation();
+                    
+                    const content = toggle.nextElementSibling;
+                    const icon = toggle.querySelector('.rotate-icon');
+                    const card = toggle.closest('.card-expand');
+                    
+                    // 切换展开/折叠状态
+                    content.classList.toggle('open');
+                    icon.classList.toggle('open');
+                    
+                    // 打开模态框
+                    openModal(card);
+                });
+            });
+
+            // 卡片点击打开模态框
+            document.querySelectorAll('.card-expand').forEach(card => {
+                card.addEventListener('click', () => {
+                    openModal(card);
+                });
+            });
+
+            // 关闭模态框按钮
+            document.getElementById('close-modal').addEventListener('click', closeModal);
+
+            // 点击背景关闭模态框
+            document.getElementById('fullscreen-modal').addEventListener('click', (e) => {
+                if (e.target === document.getElementById('fullscreen-modal')) {
+                    closeModal();
+                }
+            });
+
+            // 按ESC键关闭模态框
+            document.addEventListener('keydown', (e) => {
+                if (e.key === 'Escape' && document.getElementById('fullscreen-modal').classList.contains('active')) {
+                    closeModal();
+                }
+            });
+        });
+    </script>
+</body>
+</html>
